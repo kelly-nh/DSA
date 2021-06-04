@@ -1,0 +1,82 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+struct BST{
+    Node* root;
+};
+
+Node *createNode(int x) {
+    Node *newNode = new Node;
+    newNode->data = x;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+void init(BST &t) {
+    t.root = NULL;
+}
+
+Node *addToBST(Node* &root, int x) {
+    
+    //base case
+    if (root == NULL) {
+        return createNode(x);
+    }
+
+    //recursive steps
+    if (x < root->data) {
+        root->left = addToBST(root->left, x);
+    }
+    else if (x > root->data) {
+        root->right = addToBST(root->right, x);
+    }
+    return root;
+}
+
+Node *findMin(Node* root) {
+    Node *cur = root;
+    
+    while (cur->left != NULL) {
+        cur = cur->left;
+    }
+    return cur;
+
+}
+void erase(Node *root) {
+	if (root->left != NULL) {
+		erase(root->left); 
+	}
+	
+	if (root->right != NULL) {
+		erase(root->right); 
+	}
+	delete root; 
+}
+
+int main() {
+
+    int n, x;
+    cin >> n;
+
+    BST t;
+    init(t);
+    //Node *p = t.root;
+
+    for (int i = 0; i < n; i++) {
+        cin >> x;
+        x = abs(x);
+        t.root = addToBST(t.root, x);
+       
+    }
+    cout << findMin(t.root)->data;
+    erase(t.root);
+    return 0;
+}
